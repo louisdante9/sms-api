@@ -1,221 +1,68 @@
-# SMS Management Application API
+# SMS-API
+SMS-API is a collection of APIs for the SMS Management System.
 
-## Installation
-- Clone the repo onto your machine
-- Rename `.env.example` to `.env`
-- Create a postgres database and add it url in the `.env` file
-- Run the database migrations with the `yarn migrate` command
-- Run `yarn start` to start the application.
+## Hosted Application
+https://larrystone-sma.herokuapp.com
 
-## Documentation
+## API Documentation
+- [v1](https://documenter.getpostman.com/view/616731/S11BzNKe)
 
-Below is the API document. You can also find it [here]() in a postman collection.
 
-### Creating a contact
-To create a contact send a payload to the endpoint below.
-```angular2html
-    /api/v1/contacts
-```
+## Installation 
+1. Install [`node`](https://nodejs.org/en/download/), version 5 or greater
 
-**Payload example:**
+2. Install [`postgres`](https://www.postgresql.org/download/) or `brew install postgres` for mac users
 
-```angular2html
-    {
-    	"name": "Louis Nwamadi",
-    	"phoneNumber": "0789525579"
-    }
-```
+3. Clone the repo and cd into it
 
-**Response:**
-```angular2html
-    {
-        "status": "success",
-        "data": {
-            "id": 1,
-            "name": "Louis Nwamadi",
-            "phoneNumber": "0789525579",
-            "updatedAt": "2018-10-03T18:47:12.255Z",
-            "createdAt": "2018-10-03T18:47:12.255Z"
-        },
-        "message": "Contact created successfully"
-    }
-```
+    ```
+    git clone https://github.com/larrystone/SMA.git"
+    cd sms-api
+    ```
 
-## List all contacts
-Use the endpoint below to get a list of all the contacts in the system.
+4. Install all dependencies
 
-```angular2html
-    /api/v1/contacts
-```
+    ```
+    npm install
+    ```
 
-**Response:**
+5. Configure Postgres
 
-```angular2html
-    {
-        "status": "success",
-        "data": [
-            {
-                "id": 1,
-                "name": "Louis",
-                "phoneNumber": "0789525579",
-                "createdAt": "2018-10-03T09:46:55.416Z",
-                "updatedAt": "2018-10-03T09:46:55.416Z"
-            },
-            {
-                "id": 3,
-                "name": "Dante",
-                "phoneNumber": "0789525592",
-                "createdAt": "2018-10-03T18:35:22.387Z",
-                "updatedAt": "2018-10-03T18:35:22.387Z"
-            },
-            {
-                "id": 4,
-                "name": "Henry",
-                "phoneNumber": "0789525591",
-                "createdAt": "2018-10-03T18:47:12.255Z",
-                "updatedAt": "2018-10-03T18:47:12.255Z"
-            }
-        ]
-    }
-```
+    ```
+    configure your environment variables in
+    `./api/v1/config/index.js` using .env.example file template
+    ```
 
-### Sending/Creating a message
-This is the endpoint for sending a message where `contactId` is the contact Id
-```angular2html
-    /api/v1/contacts/:contactId/sms
-```
+6.  Run database migrations
 
-Below is the payload to send when creating a message where receiverId is the contact id 
-of message recipient.
+    ```
+    $ sequelize db:migrate
+    ```
 
-```angular2html
-    {
-    	"text": "come home tomorrow",
-    	"receiverId": 1
-    }
-``` 
+7. Start the app
 
-**Response:** 
+    ```
+    npm start
+    ```
 
-```angular2html
-    {
-        "status": "Success",
-        "data": {
-            "id": 3,
-            "text": "come home tomorrow",
-            "receiverId": 1,
-            "senderId": 2,
-            "status": true,
-            "updatedAt": "2018-10-04T06:32:54.349Z",
-            "createdAt": "2018-10-04T06:32:54.349Z"
-        },
-        "message": "Message sent successfully"
-    }
-```
+8. Test the application with POSTMAN or with curl
 
-### Delete contact
-Deleting a contact deletes all the messages it references in the entire
-application. 
+    ```
+    http://localhost:3002/
+    ```    
 
-Send a `Delete` request with the `contactId` to the endpoint below.
+## Testing
 
-```angular2html
-    /api/v1/contacts/:contactId
-```
+The app uses `Mocha`, `Chai` and `Chai-Http` for testing, 
+Run `npm run test` to run tests
 
-**Response:**
 
-```angular2html
-    {
-        "status": "success",
-        "message": "Contact has been deleted together with all the messages it references"
-    }
-```
-## List messages sent by a contact
-Send a `GET` request to the endpoint below
+## Built With
+* [NodeJS](https://nodejs.org/en/) - A Javascript runtime built on chrome V8 engine that uses an event-driven non-blocking I/O model that makes it lightweight and efficient.
+* [ExpressJs](https://expressjs.com/) - A minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
+* [Sequelize](http://docs.sequelizejs.com/) - An ORM for Node.js that supports the dialects of PostgreSQL and features solid transaction support an relations.
+* [Postgres](https://www.postgresql.org/) - A powerful, open source object-relational database system.
 
-```angular2html
-    /api/v1/contacts/:contactId/sent/sms
-```
+## Author
 
-**Response:**
-
-```angular2html
-    {
-        "status": "success",
-        "data": [
-            {
-                "id": 7,
-                "text": "Yo man tomorrow",
-                "status": true,
-                "createdAt": "2018-10-04T12:46:45.593Z",
-                "updatedAt": "2018-10-04T12:46:45.593Z",
-                "senderId": 3,
-                "receiverId": 1
-            },
-            {
-                "id": 8,
-                "text": "Go away",
-                "status": true,
-                "createdAt": "2018-10-04T12:46:54.890Z",
-                "updatedAt": "2018-10-04T12:46:54.890Z",
-                "senderId": 3,
-                "receiverId": 1
-            }
-        ],
-        "message": "Successfully returned messages sent by a contact with Id 3"
-    }
-```
-
-## List all received messages 
-Send a `GET` request to the endpoint below
-
-```angular2html
-    /api/v1/contacts/:contactId/received/sms
-``` 
-
-**Response:**
-
-```angular2html
-    {
-        "status": "success",
-        "data": [
-            {
-                "id": 5,
-                "text": "come home tomorrow",
-                "status": true,
-                "createdAt": "2018-10-04T09:48:22.626Z",
-                "updatedAt": "2018-10-04T09:48:22.626Z",
-                "senderId": 4,
-                "receiverId": 1
-            },
-            {
-                "id": 6,
-                "text": "Yo man tomorrow",
-                "status": true,
-                "createdAt": "2018-10-04T09:48:38.827Z",
-                "updatedAt": "2018-10-04T09:48:38.827Z",
-                "senderId": 4,
-                "receiverId": 1
-            }
-        ],
-        "message": "Successfully returned messages received by 1"
-    }
-```
-
-## Delete message
-
-Send a `DELETE` request to the endpoint below
-
-```angular2html
-    /api/v1/contacts/:contactId/sms/:messageId
-```
-
-**Response:**
-
-```angular2html
-    {
-        "status": "success",
-        "message": "Message deleted successfully"
-    }
-```
+* **Louisdante** - Opensourcer.
