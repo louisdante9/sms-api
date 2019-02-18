@@ -50,13 +50,11 @@ export default class Contacts {
                     returning: true,
                 });
                const result =  await  response(res, 200, { message: 'Contact updated', contact });
-                return console.log(result, '=========>>>>>>>>')
         } catch (error) {
             if (error.name === 'SequelizeUniqueConstraintError') {
                 const err = {
                     message:  'phone is already in use'
                 }
-                console.log(err.message, 'hello there')
                 return res.status(500).json(err)
             }
             return response(res, 500, { error });
