@@ -1,9 +1,6 @@
 # SMS-API
 SMS-API is a collection of APIs for the SMS Management System.
 
-## Hosted Application
-https://larrystone-sma.herokuapp.com
-
 ## API Documentation
 - [v1](https://documenter.getpostman.com/view/616731/S11BzNKe)
 
@@ -16,7 +13,7 @@ https://larrystone-sma.herokuapp.com
 3. Clone the repo and cd into it
 
     ```
-    git clone https://github.com/larrystone/SMA.git"
+    git clone https://github.com/louisdante9/sms-api.git"
     cd sms-api
     ```
 
